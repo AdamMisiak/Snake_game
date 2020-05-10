@@ -2,7 +2,7 @@ import pygame
 import random
 
 
-class Cube():
+class Snake():
 	width = 500
 	rows = 20
 	color = (255,0,0)
@@ -34,7 +34,6 @@ class Cube():
 					self.direction_y = 0
 
 		self.position = (self.position[0] + self.direction_y, self.position[1] + self.direction_x)
-		print(self.position[1], self.position[0])
 
 		if self.direction_y == -1 and self.position[0] < 0:
 			self.position = (self.rows - 1, self.position[1])
@@ -53,9 +52,23 @@ class Cube():
 		column = self.position[0]
 		pygame.draw.rect(window, self.color, (row*distance+1,column*distance+1, distance-1, distance-1))
 
+class Cube():
+	width = 500
+	rows = 20
+
+	def __init__(self, start, color):
+		self.position = start
+		self.color = color
+
+	def draw(self, window):
+		distance = self.width // self.rows
+
+		row = self.position[1]
+		column = self.position[0]
+		pygame.draw.rect(window, self.color, (row*distance+1,column*distance+1, distance-1, distance-1))
 
 
-def drawGrid(width, rows, window):
+def draw_grid(width, rows, window):
 	gap = width // rows
 	x_pos = 0
 	y_pos = 0
@@ -65,33 +78,39 @@ def drawGrid(width, rows, window):
 		pygame.draw.line(window, (255, 255, 255), (x_pos, 0), (x_pos, width))
 		pygame.draw.line(window, (255, 255, 255), (0, y_pos), (width, y_pos))
 
-def randomCube()
+def random_snack(rows):
+	x = random.randrange(rows)
+	y = random.randrange(rows)
+	return (x,y)
 
 
-def redrawWindow(window):
+def redraw_window(window):
 	global rows, width, cube
 	window.fill((0,0,0))
-	cube.draw(window)
-	drawGrid(width, rows, window)
-	cube.move()
+	snake.draw(window)
+	snack.draw(window)
+	draw_grid(width, rows, window)
 	pygame.display.update()
 
 
 
 def main():
-	global width, rows, window, cube
+	global width, rows, window, snake, snack
 	width = 500
 	rows = 20
 	window = pygame.display.set_mode((width, width))
-	cube = Cube((0,0), 0, 0)
+	snake = Snake((0,0), 0, 0,)
+	snack = Cube(random_snack(rows), (0, 255, 0))
 	flag = True
 	clock = pygame.time.Clock()
 
 	while True:
 		pygame.time.delay(50)
 		clock.tick(10)
-		#cube.move()
-		redrawWindow(window)
+		snake.move()
+		if snake.position == snack.position:
+			snack = Cube(random_snack(rows), (0, 255, 0))
 
+		redraw_window(window)
 
 main()
