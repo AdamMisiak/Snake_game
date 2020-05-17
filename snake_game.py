@@ -1,6 +1,7 @@
 import pygame
 import random
 
+
 class Cube():
 	width = 500
 	rows = 20
@@ -28,6 +29,7 @@ class Snake():
 	rows = 20
 	color = (255, 0, 0)
 	body = []
+	turns = {}
 
 	def __init__(self, start):
 		self.position = start
@@ -48,38 +50,42 @@ class Snake():
 				if keys[pygame.K_w]:
 					self.direction_x = 0
 					self.direction_y = -1
+					self.turns[self.head.position[:]] = [self.direction_y, self.direction_x]
 				elif keys[pygame.K_s]:
 					self.direction_x = 0
 					self.direction_y = 1
+					self.turns[self.head.position[:]] = [self.direction_y, self.direction_x]
 				elif keys[pygame.K_a]:
 					self.direction_x = -1
 					self.direction_y = 0
+					self.turns[self.head.position[:]] = [self.direction_y, self.direction_x]
 				elif keys[pygame.K_d]:
 					self.direction_x = 1
 					self.direction_y = 0
+					self.turns[self.head.position[:]] = [self.direction_y, self.direction_x]
 
-
-		for cube in self.body:
+		#print(self.body[0].position)
+		for index, cube in enumerate(self.body):
+			positions = cube.position[:]
 			cube.move(self.direction_x, self.direction_y)
-		#self.body[0].move(self.position[0] + self.direction_y, self.position[1] + self.direction_x)
-		#self.position = (self.position[0] + self.direction_y, self.position[1] + self.direction_x)
 
-		if self.direction_y == -1 and self.position[0] < 0:
-			self.position = (self.rows - 1, self.position[1])
-		elif self.direction_y == 1 and self.position[0] >= self.rows:
-			self.position = (0, self.position[1])
-		elif self.direction_x == -1 and self.position[1] < 0:
-			self.position = (self.position[0], self.rows - 1)
-		elif self.direction_x == 1 and self.position[1] >= self.rows:
-			self.position = (self.position[0], 0)
+			if cube.direction_y == -1 and cube.position[0] < 0:
+				cube.position = (cube.rows - 1, cube.position[1])
+			elif cube.direction_y == 1 and cube.position[0] >= cube.rows:
+				cube.position = (0, cube.position[1])
+			elif cube.direction_x == -1 and cube.position[1] < 0:
+				cube.position = (cube.position[0], cube.rows - 1)
+			elif cube.direction_x == 1 and cube.position[1] >= cube.rows:
+				cube.position = (cube.position[0], 0)
+
 
 	def addCube(self):
 		tail = self.body[-1]
-		self.body.append(Cube((tail.position[0], tail.position[1])))
+		self.body.append(Cube((tail.position[0]-1, tail.position[1])))
 		#tail_x = tail.
 
 	def draw(self, window):
-		for i, c in enumerate(self.body):
+		for c in self.body:
 			c.draw(window)
 
 
@@ -104,7 +110,7 @@ def redraw_window(window):
 	global rows, width,snake, snack
 	window.fill((0, 0, 0))
 	snake.draw(window)
-	#snack.draw(window)
+	snack.draw(window)
 	draw_grid(width, rows, window)
 	pygame.display.update()
 
@@ -124,8 +130,8 @@ def main():
 		clock.tick(10)
 		snake.move()
 
-		if snake.position == snack.position:
-			#snake.addCube()
+		if snake.body[0].position == snack.position:
+			snake.addCube()
 			snack = Cube(random_snack(rows), (0, 255, 0), 1, 0)
 
 		redraw_window(window)
