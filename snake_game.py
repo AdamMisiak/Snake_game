@@ -64,10 +64,15 @@ class Snake():
 					self.direction_y = 0
 					self.turns[self.head.position[:]] = [self.direction_y, self.direction_x]
 
-		#print(self.body[0].position)
 		for index, cube in enumerate(self.body):
 			positions = cube.position[:]
-			cube.move(self.direction_x, self.direction_y)
+
+			print(self.turns)
+			if positions in self.turns:
+				turn = self.turns[positions]
+				cube.move(turn[1], turn[0])
+				if index == len(self.body)-1:
+					self.turns.pop(positions)
 
 			if cube.direction_y == -1 and cube.position[0] < 0:
 				cube.position = (cube.rows - 1, cube.position[1])
@@ -77,12 +82,23 @@ class Snake():
 				cube.position = (cube.position[0], cube.rows - 1)
 			elif cube.direction_x == 1 and cube.position[1] >= cube.rows:
 				cube.position = (cube.position[0], 0)
+			else:
+				cube.move(cube.direction_x, cube.direction_y)
 
 
 	def addCube(self):
 		tail = self.body[-1]
-		self.body.append(Cube((tail.position[0]-1, tail.position[1])))
-		#tail_x = tail.
+		if tail.direction_x == 1 and tail.direction_y == 0:
+			self.body.append(Cube((tail.position[0], tail.position[1]-1), color=(255, 0, 0)))
+		elif tail.direction_x == -1 and tail.direction_y == 0:
+			self.body.append(Cube((tail.position[0], tail.position[1]+1), color=(255, 0, 0)))
+		elif tail.direction_x == 0 and tail.direction_y == 1:
+			self.body.append(Cube((tail.position[0]-1, tail.position[1]), color=(255, 0, 0)))
+		elif tail.direction_x == 0 and tail.direction_y == -1:
+			self.body.append(Cube((tail.position[0]+1, tail.position[1]), color=(255, 0, 0)))
+
+		self.body[-1].direction_x = tail.direction_x
+		self.body[-1].direction_y = tail.direction_y
 
 	def draw(self, window):
 		for c in self.body:
