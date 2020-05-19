@@ -1,4 +1,4 @@
-# Snake_game
+# Snake game
 
 Simple snake game created with pygame. Created with help of YouTube's tutorials.
 
