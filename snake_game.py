@@ -148,6 +148,7 @@ def main():
 	width = 500
 	rows = 20
 	window = pygame.display.set_mode((width, width))
+	pygame.display.set_caption('Snake Game')
 	snake = Snake((5, 5))
 	snack = Cube(random_snack(rows), (0, 255, 0), 1, 0)
 	flag = True
@@ -162,13 +163,11 @@ def main():
 			snake.addCube()
 			snack = Cube(random_snack(rows), (0, 255, 0), 1, 0)
 
-		#print(snake.body[0].position)
 		for index, body_element in enumerate(snake.body[1:]):
 			if snake.body[0].position == body_element.position:
 				print('You lost! Your score is:', len(snake.body))
 				snake.reset((5,5))
 				break
-
 
 		redraw_window(window)
 
