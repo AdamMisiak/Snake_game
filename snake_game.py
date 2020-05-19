@@ -87,6 +87,13 @@ class Snake():
 				else:
 					cube.move(cube.direction_x, cube.direction_y)
 
+	def reset(self, window):
+		self.head = Cube(window)
+		self.body = []
+		self.body.append(self.head)
+		self.turns = {}
+		self.direction_x = 1
+		self.direction_y = 0
 
 	def addCube(self):
 		tail = self.body[-1]
@@ -140,7 +147,6 @@ def main():
 	global width, rows, window, snake, snack
 	width = 500
 	rows = 20
-	body = {}
 	window = pygame.display.set_mode((width, width))
 	snake = Snake((5, 5))
 	snack = Cube(random_snack(rows), (0, 255, 0), 1, 0)
@@ -156,13 +162,14 @@ def main():
 			snake.addCube()
 			snack = Cube(random_snack(rows), (0, 255, 0), 1, 0)
 
+		#print(snake.body[0].position)
+		for index, body_element in enumerate(snake.body[1:]):
+			if snake.body[0].position == body_element.position:
+				print('You lost! Your score is:', len(snake.body))
+				snake.reset((5,5))
+				break
 
-		# for index, body_element in enumerate(snake.body[1:]):
-		# 	body[body_element.position] = index
-		#
-		# 	print(body)
-		if snake.body[0].position in body:
-			print('debil')
+
 		redraw_window(window)
 
 
