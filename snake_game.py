@@ -52,15 +52,11 @@ class Snake():
 		self.position = start
 		self.direction_x = 0
 		self.direction_y = 0
-		self.head = Cube(self.position, self.color, 1, 0)
+		self.head = Cube(self.position, color, 1, 0)
 		self.body.append(self.head)
 
 
 	def move(self, up, down, left, right):
-		self.up = up
-		self.down = down
-		self.left = left
-		self.right = right
 
 		events = pygame.event.get()
 		for event in events:
@@ -70,19 +66,19 @@ class Snake():
 		keys = pygame.key.get_pressed()
 
 		for key in keys:
-			if keys[self.up]:
+			if keys[up]:
 				self.direction_x = 0
 				self.direction_y = -1
 				self.turns[self.head.position[:]] = [self.direction_y, self.direction_x]
-			elif keys[self.down]:
+			elif keys[down]:
 				self.direction_x = 0
 				self.direction_y = 1
 				self.turns[self.head.position[:]] = [self.direction_y, self.direction_x]
-			elif keys[self.left]:
+			elif keys[left]:
 				self.direction_x = -1
 				self.direction_y = 0
 				self.turns[self.head.position[:]] = [self.direction_y, self.direction_x]
-			elif keys[self.right]:
+			elif keys[right]:
 				self.direction_x = 1
 				self.direction_y = 0
 				self.turns[self.head.position[:]] = [self.direction_y, self.direction_x]
@@ -108,7 +104,7 @@ class Snake():
 					cube.move(cube.direction_x, cube.direction_y)
 
 	def reset(self, window):
-		self.head = Cube(window)
+		self.head = Cube(window, self.color)
 		self.body = []
 		self.body.append(self.head)
 		self.turns = {}
@@ -154,6 +150,13 @@ def random_snack(rows):
 	return (x, y)
 
 
+def collision():
+	print('GAME OVER!\n', 'First player points:', len(snake1.body))
+	print('Second player points:', len(snake2.body))
+	snake1.reset((5, 5))
+	snake2.reset((25, 25))
+
+
 def redraw_window(window):
 	global rows, width, snake1, snake2, snack
 	window.fill((0, 0, 0))
@@ -190,14 +193,19 @@ def main():
 
 		if snake1.body[0].position == snack.position:
 			snake1.addCube()
-			snack = Cube(random_snack(rows), (0, 255, 0), 1, 0)
+			snack = Cube(random_snack(rows), green, 1, 0)
+		elif snake2.body[0].position == snack.position:
+			snake2.addCube()
+			snack = Cube(random_snack(rows), green, 1, 0)
 
 		for index, body_element in enumerate(snake1.body[1:]):
 			if snake1.body[0].position == body_element.position:
-				print('You lost! Your score is:', len(snake1.body))
-				snake1.reset((5, 5))
+				collision()
 				break
-
+			elif snake1.body[0].position in snake2.body[:]:
+				collision()
+				break
+		print(snake2.body[0].position)
 		redraw_window(window)
 
 
