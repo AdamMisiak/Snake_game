@@ -2,6 +2,9 @@
 
 Simple snake game created with pygame. Created with help of YouTube's tutorials.
 
+## Demo
+![Alt Text](https://media.giphy.com/media/MAWq1Tb3kyZmpAz0ed/giphy.gif)
+
 ## Setup
 To run game:
 ```
