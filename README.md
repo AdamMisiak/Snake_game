@@ -6,6 +6,10 @@ Simple snake game created with pygame. Basic version created with help of: https
 ![Alt Text](https://media.giphy.com/media/MAWq1Tb3kyZmpAz0ed/giphy.gif)
 
 ## Setup
+To install libraries:
+```
+pip install requirements.txt
+```
 To run game:
 ```
 python snake_game.py
