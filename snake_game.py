@@ -151,7 +151,8 @@ def random_snack(rows):
 
 
 def collision():
-	print('GAME OVER!\n', 'First player points:', len(snake1.body))
+	print('GAME OVER!')
+	print('First player points:', len(snake1.body))
 	print('Second player points:', len(snake2.body))
 	snake1.reset((5, 5))
 	snake2.reset((25, 25))
@@ -191,6 +192,7 @@ def main():
 		snake1.move(pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d)
 		snake2.move(pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT)
 
+		# ADDING SNACKS
 		if snake1.body[0].position == snack.position:
 			snake1.addCube()
 			snack = Cube(random_snack(rows), green, 1, 0)
@@ -198,14 +200,25 @@ def main():
 			snake2.addCube()
 			snack = Cube(random_snack(rows), green, 1, 0)
 
+		# COLLISION OF FIRST SNAKE'S HEAD WITH BODY
 		for index, body_element in enumerate(snake1.body[1:]):
 			if snake1.body[0].position == body_element.position:
 				collision()
 				break
-			elif snake1.body[0].position in snake2.body[:]:
+
+		# COLLISION OF SECOND SNAKE'S HEAD WITH BODY
+		for index, body_element in enumerate(snake2.body[1:]):
+			if snake2.body[0].position == body_element.position:
 				collision()
 				break
-		print(snake2.body[0].position)
+
+		# COLLISION OF BOTH SNAKES BODIES
+		for index2, body_element2 in enumerate(snake2.body[:]):
+			for index, body_element in enumerate(snake1.body[:]):
+				if body_element2.position == body_element.position:
+					collision()
+					break
+
 		redraw_window(window)
 
 
