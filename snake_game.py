@@ -174,7 +174,8 @@ def redraw_window(window):
 def draw_text(text, font, color, surface, x, y):
 	text_object = font.render(text, 1, color)
 	text_rect = text_object.get_rect()
-	text_rect.topleft = (x, y)
+	#text_rect.topleft = (x, y)
+	text_rect.center = (x, y)
 	surface.blit(text_object, text_rect)
 
 
@@ -183,15 +184,31 @@ def main_menu():
 
 	width = 800
 	rows = 40
+	click = False
 
 	pygame.init()
-	font = pygame.font.SysFont(None, 60)
+	font_title = pygame.font.SysFont(None, 75)
+	font_buttons = pygame.font.SysFont(None, 55)
 	window = pygame.display.set_mode((width, width))
 	pygame.display.set_caption('Snake Game')
 
 	while True:
 		window.fill((0, 0, 0))
-		draw_text('SNAKE GAME', font, white, window, (width/2)-140, 30)
+		draw_text('SNAKE GAME', font_title, white, window, (width/2), 80)
+
+		mouse_x, mouse_y = pygame.mouse.get_pos()
+
+		# DRAWING SIGNS AND BUTTONS IN MAIN MENU
+		start = pygame.Rect((width/2)-100, 320, 200, 50)
+		draw_text('START', font_buttons, white, window, (width / 2), 300)
+
+		body_color1 = pygame.Rect((width/2)-100, 400, 200, 50)
+		body_color2 = pygame.Rect((width / 2) - 100, 480, 200, 50)
+		exit = pygame.Rect((width / 2) - 100, 650, 200, 50)
+		pygame.draw.rect(window, gray, start)
+		pygame.draw.rect(window, gray, body_color1)
+		pygame.draw.rect(window, gray, body_color2)
+		pygame.draw.rect(window, red, exit)
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -199,6 +216,10 @@ def main_menu():
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
 					pygame.quit()
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				if event.button == 1:
+					click = True
+
 		pygame.display.update()
 
 
