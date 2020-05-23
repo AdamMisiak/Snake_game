@@ -1,6 +1,7 @@
 import pygame
 import random
 
+# COLORS
 white = (255,255,255)
 red = (255,0,0)
 blue = (30,144,255)
@@ -58,13 +59,13 @@ class Snake():
 
 	def move(self, up, down, left, right):
 
-		events = pygame.event.get()
-		for event in events:
+		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.quit()
 
 		keys = pygame.key.get_pressed()
 
+		# DIRECTION OF MOVING READING
 		for key in keys:
 			if keys[up]:
 				self.direction_x = 0
@@ -83,6 +84,7 @@ class Snake():
 				self.direction_y = 0
 				self.turns[self.head.position[:]] = [self.direction_y, self.direction_x]
 
+		# TURNING OF SNAKE
 		for index, cube in enumerate(self.body):
 			positions = cube.position[:]
 
@@ -92,6 +94,7 @@ class Snake():
 				if index == len(self.body) - 1:
 					self.turns.pop(positions)
 			else:
+				# MOVING SNAKE OUTREACHED WINDOW
 				if cube.direction_y == -1 and cube.position[0] < 0:
 					cube.position = (cube.rows - 1, cube.position[1])
 				elif cube.direction_y == 1 and cube.position[0] >= cube.rows:
@@ -167,28 +170,61 @@ def redraw_window(window):
 	draw_grid(width, rows, window)
 	pygame.display.update()
 
+# MENU FUNCTIONS
+def draw_text(text, font, color, surface, x, y):
+	text_object = font.render(text, 1, color)
+	text_rect = text_object.get_rect()
+	text_rect.topleft = (x, y)
+	surface.blit(text_object, text_rect)
 
-def main():
+
+def main_menu():
 	global width, rows, window, snake1, snake2, snack
+
 	width = 800
 	rows = 40
+
+	pygame.init()
+	font = pygame.font.SysFont(None, 60)
+	window = pygame.display.set_mode((width, width))
+	pygame.display.set_caption('Snake Game')
+
+	while True:
+		window.fill((0, 0, 0))
+		draw_text('SNAKE GAME', font, white, window, (width/2)-140, 30)
+
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					pygame.quit()
+		pygame.display.update()
+
+
+def game():
 	body1 = []
 	body2 = []
 	turns1 = {}
 	turns2 = {}
-	window = pygame.display.set_mode((width, width))
+
 	pygame.display.set_caption('Snake Game')
+
+	# CREATING OBJECTS
 	snake1 = Snake((5, 5), body1, turns1, blue)
 	snake2 = Snake((25, 25),body2, turns2, red)
 	snack = Cube(random_snack(rows), green, 1, 0)
+
 	flag = True
 	clock = pygame.time.Clock()
 
+	# MAIN LOOP
 	while flag:
 		window.fill((0, 0, 0))
 		pygame.time.delay(50)
 		clock.tick(10)
 
+		# SNAKES MOVING
 		snake1.move(pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d)
 		snake2.move(pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT)
 
@@ -222,4 +258,4 @@ def main():
 		redraw_window(window)
 
 
-main()
+main_menu()
