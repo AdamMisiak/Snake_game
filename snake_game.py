@@ -153,13 +153,13 @@ def draw_grid(width, rows, window):
 def random_snack(rows):
 	x = random.randrange(rows)
 	y = random.randrange(rows)
-	return (x, y)
+	return x, y
 
 
 def collision():
 	print('GAME OVER!')
-	print('First player points:', len(snake1.body))
-	print('Second player points:', len(snake2.body))
+	print('First player points:', len(snake1.body)-1)
+	print('Second player points:', len(snake2.body)-1)
 	snake1.reset((5, 5))
 	snake2.reset((25, 25))
 
@@ -173,27 +173,29 @@ def redraw_window(window):
 	draw_grid(width, rows, window)
 	pygame.display.update()
 
-# MENU FUNCTIONS
+
 def draw_text(text, font, color, surface, x, y):
 	text_object = font.render(text, 1, color)
 	text_rect = text_object.get_rect()
-	#text_rect.topleft = (x, y)
 	text_rect.center = (x, y)
 	surface.blit(text_object, text_rect)
 
 
 def main_menu():
-	global width, rows, window, snake1, snake2, snack
+	global width, rows, window, snake1, snake2, snack, color_list, counter1, counter2
 
 	width = 800
 	rows = 40
 	click = False
+	color_list = [gray, red, blue, yellow, green, purple]
+	counter1 = 0
+	counter2 = 0
 
 	pygame.init()
 	font_title = pygame.font.SysFont(None, 75)
 	font_buttons = pygame.font.SysFont(None, 55)
 	window = pygame.display.set_mode((width, width))
-
+	pygame.display.set_caption('Snake game')
 
 	while True:
 		window.fill((0, 0, 0))
@@ -203,20 +205,39 @@ def main_menu():
 
 		# DRAWING SIGNS AND BUTTONS IN MAIN MENU
 		start = pygame.Rect((width/2)-100, 320, 200, 50)
-		draw_text('START', font_buttons, white, window, (width / 2), 300)
-
 		body_color1 = pygame.Rect((width/2)-100, 400, 200, 50)
 		body_color2 = pygame.Rect((width / 2) - 100, 480, 200, 50)
 		exit = pygame.Rect((width / 2) - 100, 650, 200, 50)
 
+		# CLICKING BUTTONS
 		if start.collidepoint((mouse_x, mouse_y)):
 			if click:
 				game()
+		elif body_color1.collidepoint((mouse_x, mouse_y)):
+			if click:
+				counter1 += 1
+				if counter1 >= len(color_list):
+					counter1 = 0
+		elif body_color2.collidepoint((mouse_x, mouse_y)):
+			if click:
+				counter2 += 1
+				if counter2 >= len(color_list):
+					counter2 = 0
+		elif exit.collidepoint((mouse_x, mouse_y)):
+			if click:
+				break
 
+		# DRAWING SIGNS AND BUTTONS
 		pygame.draw.rect(window, gray, start)
-		pygame.draw.rect(window, gray, body_color1)
-		pygame.draw.rect(window, gray, body_color2)
+		draw_text('START', font_buttons, white, window, (width / 2), 345)
+		pygame.draw.rect(window, color_list[counter1], body_color1)
+		draw_text('COLOR1', font_buttons, white, window, (width / 2), 425)
+		pygame.draw.rect(window, color_list[counter2], body_color2)
+		draw_text('COLOR2', font_buttons, white, window, (width / 2), 505)
 		pygame.draw.rect(window, red, exit)
+		draw_text('QUIT', font_buttons, white, window, (width / 2), 675)
+
+		click = False
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -232,20 +253,17 @@ def main_menu():
 
 
 def game():
-	global width, rows, window, snake1, snake2, snack
+	global width, rows, window, snake1, snake2, snack, color1, color2
 	body1 = []
 	body2 = []
 	turns1 = {}
 	turns2 = {}
-
 	pygame.display.set_caption('Snake Game')
 
 	# CREATING OBJECTS
-	snake1 = Snake((5, 5), body1, turns1, blue)
-	snake2 = Snake((25, 25),body2, turns2, red)
+	snake1 = Snake((5, 5), body1, turns1, color_list[counter1])
+	snake2 = Snake((25, 25),body2, turns2, color_list[counter2])
 	snack = Cube(random_snack(rows), green, 1, 0)
-
-
 	flag = True
 	clock = pygame.time.Clock()
 
@@ -254,7 +272,7 @@ def game():
 		window.fill((0, 0, 0))
 		pygame.time.delay(50)
 		clock.tick(10)
-		points = 'First player: ' + str(len(snake1.body)) + ' Second player: ' + str(len(snake2.body))
+		points = 'First player: ' + str(len(snake1.body)-1) + ' Second player: ' + str(len(snake2.body)-1)
 		pygame.display.set_caption(points)
 
 		# SNAKES MOVING
