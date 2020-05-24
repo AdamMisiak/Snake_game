@@ -12,8 +12,8 @@ gray = (128,128,128)
 
 
 class Cube():
-	width = 800
-	rows = 40
+	width = 600
+	rows = 30
 	direction_x = 1
 	direction_y = 0
 
@@ -41,8 +41,8 @@ class Cube():
 
 
 class Snake():
-	width = 800
-	rows = 40
+	width = 600
+	rows = 30
 	body = []
 	turns = {}
 
@@ -184,8 +184,8 @@ def draw_text(text, font, color, surface, x, y):
 def main_menu():
 	global width, rows, window, snake1, snake2, snack, color_list, counter1, counter2
 
-	width = 800
-	rows = 40
+	width = 600
+	rows = 30
 	click = False
 	color_list = [gray, red, blue, yellow, green, purple]
 	counter1 = 0
@@ -195,19 +195,19 @@ def main_menu():
 	font_title = pygame.font.SysFont(None, 75)
 	font_buttons = pygame.font.SysFont(None, 55)
 	window = pygame.display.set_mode((width, width))
-	pygame.display.set_caption('Snake game')
+	pygame.display.set_caption('Snakesss game')
 
 	while True:
 		window.fill((0, 0, 0))
-		draw_text('SNAKE GAME', font_title, white, window, (width/2), 80)
+		draw_text('SNAKESSS GAME', font_title, white, window, (width/2), 80)
 
 		mouse_x, mouse_y = pygame.mouse.get_pos()
 
 		# DRAWING SIGNS AND BUTTONS IN MAIN MENU
-		start = pygame.Rect((width/2)-100, 320, 200, 50)
-		body_color1 = pygame.Rect((width/2)-100, 400, 200, 50)
-		body_color2 = pygame.Rect((width / 2) - 100, 480, 200, 50)
-		exit = pygame.Rect((width / 2) - 100, 650, 200, 50)
+		start = pygame.Rect((width/2)-100, 200, 200, 50)
+		body_color1 = pygame.Rect((width/2)-100, 280, 200, 50)
+		body_color2 = pygame.Rect((width / 2) - 100, 360, 200, 50)
+		exit = pygame.Rect((width / 2) - 100, 440, 200, 50)
 
 		# CLICKING BUTTONS
 		if start.collidepoint((mouse_x, mouse_y)):
@@ -229,13 +229,13 @@ def main_menu():
 
 		# DRAWING SIGNS AND BUTTONS
 		pygame.draw.rect(window, gray, start)
-		draw_text('START', font_buttons, white, window, (width / 2), 345)
+		draw_text('START', font_buttons, white, window, (width / 2), 225)
 		pygame.draw.rect(window, color_list[counter1], body_color1)
-		draw_text('COLOR1', font_buttons, white, window, (width / 2), 425)
+		draw_text('COLOR1', font_buttons, white, window, (width / 2), 305)
 		pygame.draw.rect(window, color_list[counter2], body_color2)
-		draw_text('COLOR2', font_buttons, white, window, (width / 2), 505)
+		draw_text('COLOR2', font_buttons, white, window, (width / 2), 385)
 		pygame.draw.rect(window, red, exit)
-		draw_text('QUIT', font_buttons, white, window, (width / 2), 675)
+		draw_text('QUIT', font_buttons, white, window, (width / 2), 465)
 
 		click = False
 
