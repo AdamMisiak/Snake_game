@@ -3,7 +3,7 @@
 Simple snake game created with pygame. Basic version created with help of: https://www.youtube.com/channel/UC4JX40jDee_tINbkjycV4Sg/featured
 
 ## Demo
-![Alt Text](https://media.giphy.com/media/MAWq1Tb3kyZmpAz0ed/giphy.gif)
+![Alt Text](https://media.giphy.com/media/XBLBUYrBypcfbCCFON/giphy.gif)
 
 ## Setup
 To install libraries:
@@ -14,5 +14,14 @@ To run game:
 ```
 python snake_game.py
 ```
+First snake control:
+```
+W A S D
+```
+Second snake control:
+```
+↑ ← ↓ →
+```
+
 ## Contact
 Created by Adam Misiak
