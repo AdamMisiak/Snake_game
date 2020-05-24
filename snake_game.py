@@ -62,6 +62,9 @@ class Snake():
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.quit()
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					main_menu()
 
 		keys = pygame.key.get_pressed()
 
@@ -190,7 +193,7 @@ def main_menu():
 	font_title = pygame.font.SysFont(None, 75)
 	font_buttons = pygame.font.SysFont(None, 55)
 	window = pygame.display.set_mode((width, width))
-	pygame.display.set_caption('Snake Game')
+
 
 	while True:
 		window.fill((0, 0, 0))
@@ -205,6 +208,11 @@ def main_menu():
 		body_color1 = pygame.Rect((width/2)-100, 400, 200, 50)
 		body_color2 = pygame.Rect((width / 2) - 100, 480, 200, 50)
 		exit = pygame.Rect((width / 2) - 100, 650, 200, 50)
+
+		if start.collidepoint((mouse_x, mouse_y)):
+			if click:
+				game()
+
 		pygame.draw.rect(window, gray, start)
 		pygame.draw.rect(window, gray, body_color1)
 		pygame.draw.rect(window, gray, body_color2)
@@ -224,6 +232,7 @@ def main_menu():
 
 
 def game():
+	global width, rows, window, snake1, snake2, snack
 	body1 = []
 	body2 = []
 	turns1 = {}
@@ -236,6 +245,7 @@ def game():
 	snake2 = Snake((25, 25),body2, turns2, red)
 	snack = Cube(random_snack(rows), green, 1, 0)
 
+
 	flag = True
 	clock = pygame.time.Clock()
 
@@ -244,6 +254,8 @@ def game():
 		window.fill((0, 0, 0))
 		pygame.time.delay(50)
 		clock.tick(10)
+		points = 'First player: ' + str(len(snake1.body)) + ' Second player: ' + str(len(snake2.body))
+		pygame.display.set_caption(points)
 
 		# SNAKES MOVING
 		snake1.move(pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d)
