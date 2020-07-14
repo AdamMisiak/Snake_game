@@ -8,7 +8,7 @@ Simple multiplayer version of snake game created with pygame. Basic version crea
 ## Setup
 To install libraries:
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 To run game:
 ```
